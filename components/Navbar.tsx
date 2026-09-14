@@ -21,7 +21,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-orange rounded-md flex items-center justify-center font-display font-black text-black">A</div>
-          <span className="font-display font-bold text-white text-lg tracking-wider">ANDRI STORE</span>
+          <span className="font-display font-bold text-white text-lg tracking-wider">ANDRI STORE BOT</span>
         </div>
 
         <div className="hidden md:flex items-center gap-8">
