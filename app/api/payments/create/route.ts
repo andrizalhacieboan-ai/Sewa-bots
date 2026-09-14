@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   try {
     const { packageName, duration, amount, groupLink } = await req.json();
 
-    // Validasi input
+    // Validasi input sederhana
     if (!packageName || !amount || !groupLink || !groupLink.includes('chat.whatsapp.com')) {
       return NextResponse.json({ error: 'Data tidak valid' }, { status: 400 });
     }
@@ -17,17 +17,18 @@ export async function POST(req: Request) {
     // Simpan ke database Turso
     await db.insert(orders).values({
       id: orderId,
-      packageName,
-      duration,
-      amount,
-      groupLink,
+      packageName: String(packageName),
+      duration: Number(duration),
+      amount: Number(amount),
+      groupLink: String(groupLink),
       status: 'PENDING',
+      createdAt: new Date(), // PERBAIKAN: Eksplisit mengirim tanggal saat ini
     });
 
     return NextResponse.json({
       success: true,
       orderId,
-      amount
+      amount: Number(amount)
     });
 
   } catch (error) {
