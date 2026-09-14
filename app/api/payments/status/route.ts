@@ -22,6 +22,7 @@ export async function GET(req: Request) {
       
       if (order.length > 0 && order[0].status !== 'PAID') {
         const groupLink = order[0].groupLink;
+        const durationDays = order[0].duration;
 
         // 2. Trigger Bot Server di Pterodactyl
         try {
@@ -39,14 +40,15 @@ export async function GET(req: Request) {
 
         // 4. Buat data Rental baru
         const expiredDate = new Date();
-        expiredDate.setDate(expiredDate.getDate() + order[0].duration);
+        expiredDate.setDate(expiredDate.getDate() + durationDays);
 
         await db.insert(rentals).values({
           id: `RNT-${Date.now()}`,
           orderId: orderId,
           groupLink: groupLink,
           status: 'ACTIVE',
-          expiredAt: expiredDate.toISOString(),
+          startedAt: new Date(),
+          expiredAt: expiredDate,
         });
       }
     }
