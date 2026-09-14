@@ -1,25 +1,37 @@
 import { NextResponse } from 'next/server';
-import { createQrisPayment } from '@/lib/services/payment';
+import { db } from '@/lib/db';
+import { orders } from '@/lib/db/schema';
 
 export async function POST(req: Request) {
   try {
-    const { orderId, amount } = await req.json();
+    const { packageName, duration, amount, groupLink } = await req.json();
 
-    if (!orderId || !amount) {
-      return NextResponse.json({ error: 'Missing parameters' }, { status: 400 });
+    // Validasi input
+    if (!packageName || !amount || !groupLink || !groupLink.includes('chat.whatsapp.com')) {
+      return NextResponse.json({ error: 'Data tidak valid' }, { status: 400 });
     }
 
-    const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`;
-    const paymentPayload = await createQrisPayment(orderId, amount, redirectUrl);
+    // Buat Order ID unik
+    const orderId = `AS-${Date.now()}`;
 
-    // In real app: Save paymentUrl to database associated with orderId
+    // Simpan ke database Turso
+    await db.insert(orders).values({
+      id: orderId,
+      packageName,
+      duration,
+      amount,
+      groupLink,
+      status: 'PENDING',
+    });
 
     return NextResponse.json({
       success: true,
-      data: paymentPayload
+      orderId,
+      amount
     });
 
   } catch (error) {
+    console.error('Create Order Error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
