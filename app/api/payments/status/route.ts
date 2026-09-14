@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getPaymentStatus } from '@/lib/services/payment';
+import { db } from '@/lib/db';
+import { orders, rentals } from '@/lib/db/schema';
+import { eq } from 'drizzle-orm';
 
 export async function GET(req: Request) {
   try {
@@ -13,26 +16,38 @@ export async function GET(req: Request) {
 
     const paymentDetails = await getPaymentStatus(orderId, amount);
 
-    // Jika status berhasil (completed/paid)
     if (paymentDetails.status === 'completed' || paymentDetails.status === 'paid') {
+      // 1. Ambil data order dari database Turso
+      const order = await db.select().from(orders).where(eq(orders.id, orderId)).limit(1);
       
-      // 1. Ambil data groupLink dari DB berdasarkan orderId (mock di sini)
-      const groupLink = 'https://chat.whatsapp.com/XYZ123'; // Ganti dengan query DB
+      if (order.length > 0 && order[0].status !== 'PAID') {
+        const groupLink = order[0].groupLink;
 
-      // 2. Trigger Bot Server di Pterodactyl (TANPA API KEY karena pakai API PLTA/PLTC Pterodactyl sendiri)
-      try {
-        await fetch(`${process.env.BOT_SERVER_URL}/api/join-group`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ groupLink })
+        // 2. Trigger Bot Server di Pterodactyl
+        try {
+          await fetch(`${process.env.BOT_SERVER_URL}/api/join-group`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ groupLink })
+          });
+        } catch (botError) {
+          console.error('Failed to trigger bot:', botError);
+        }
+
+        // 3. Update database Turso: Order jadi PAID
+        await db.update(orders).set({ status: 'PAID' }).where(eq(orders.id, orderId));
+
+        // 4. Buat data Rental baru
+        const expiredDate = new Date();
+        expiredDate.setDate(expiredDate.getDate() + order[0].duration);
+
+        await db.insert(rentals).values({
+          id: `RNT-${Date.now()}`,
+          orderId: orderId,
+          groupLink: groupLink,
+          status: 'ACTIVE',
+          expiredAt: expiredDate.toISOString(),
         });
-
-        // 3. Update database: Order jadi PAID, create Rental record
-        // await db.update(orders).set({ status: 'PAID' })...
-
-      } catch (botError) {
-        console.error('Failed to trigger bot:', botError);
-        // Tetap return paid agar frontend happy, tapi proses backend di-log
       }
     }
 
