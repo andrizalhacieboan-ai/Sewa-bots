@@ -1,13 +1,14 @@
-import { sqliteTable, text, integer, datetime } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 
 export const orders = sqliteTable('orders', {
-  id: text('id').primaryKey(), // Order ID unik, e.g: AS-1710000000000
+  id: text('id').primaryKey(),
   packageName: text('package_name').notNull(),
   duration: integer('duration').notNull(),
   amount: integer('amount').notNull(),
   groupLink: text('group_link').notNull(),
   status: text('status', { enum: ['PENDING', 'WAITING_PAYMENT', 'PAID', 'ACTIVE', 'EXPIRED', 'CANCELLED'] }).default('PENDING').notNull(),
-  createdAt: datetime('created_at').defaultNow().notNull(),
+  // PERBAIKAN: Gunakan integer dengan mode timestamp
+  createdAt: integer('created_at', { mode: 'timestamp' }).defaultNow().notNull(),
 });
 
 export const rentals = sqliteTable('rentals', {
@@ -15,6 +16,6 @@ export const rentals = sqliteTable('rentals', {
   orderId: text('order_id').notNull(),
   groupLink: text('group_link').notNull(),
   status: text('status', { enum: ['ACTIVE', 'EXPIRED', 'SUSPENDED'] }).default('ACTIVE').notNull(),
-  startedAt: datetime('started_at').defaultNow().notNull(),
-  expiredAt: datetime('expired_at').notNull(),
+  startedAt: integer('started_at', { mode: 'timestamp' }).defaultNow().notNull(),
+  expiredAt: integer('expired_at', { mode: 'timestamp' }).notNull(),
 });
