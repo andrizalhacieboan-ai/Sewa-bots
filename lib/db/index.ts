@@ -1,5 +1,5 @@
 import { createClient } from '@libsql/client';
-import { drizzle } from 'drizzle-orm/@libsql/client';
+import { drizzle } from 'drizzle-orm/libsql'; // PERBAIKAN ADA DI SINI
 import * as schema from './schema';
 
 // Inisialisasi koneksi Turso
