@@ -2,8 +2,8 @@ import { Pakasir } from '@/lib/pakasir';
 import { PaymentPayload } from '@/lib/types/pakasir';
 
 const pakasirInstance = new Pakasir({
-  slug: process.env.PAKASIR_SLUG,
-  apikey: process.env.PAKASIR_API_KEY,
+  slug: process.env.PAKASIR_SLUG || 'andri-store-id', // Berikan fallback string
+  apikey: process.env.PAKASIR_API_KEY || 'KHFf8FtlSgyHkEPk2WOP5aSMgvO3wvTx',       // Berikan fallback string
 });
 
 export async function createQrisPayment(orderId: string, amount: number, redirectUrl?: string): Promise<PaymentPayload> {
