@@ -21,7 +21,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-orange rounded-md flex items-center justify-center font-display font-black text-black">A</div>
-          <span className="font-display font-bold text-white text-lg tracking-wider">ANDRI STORE BOT</span>
+          <span className="font-display font-bold text-white text-lg tracking-wider">ANDRI STORE</span>
         </div>
 
         <div className="hidden md:flex items-center gap-8">
@@ -33,8 +33,10 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-4">
-          <button className="text-sm text-white hover:text-orange transition-colors">Login</button>
-          <button className="bg-orange text-black px-4 py-2 rounded-lg font-semibold text-sm hover:shadow-[0_0_20px_rgba(255,107,0,0.5)] transition-all">
+          <button onClick={() => alert('Halaman Login Segera Hadir!')} className="text-sm text-white hover:text-orange transition-colors">
+            Login
+          </button>
+          <button onClick={() => alert('Halaman Daftar Segera Hadir!')} className="bg-orange text-black px-4 py-2 rounded-lg font-semibold text-sm hover:shadow-[0_0_20px_rgba(255,107,0,0.5)] transition-all">
             Daftar
           </button>
         </div>
@@ -58,7 +60,7 @@ export default function Navbar() {
                   {l}
                 </a>
               ))}
-              <button className="bg-orange text-black px-4 py-2 rounded-lg font-semibold text-sm mt-2">Daftar</button>
+              <button onClick={() => alert('Halaman Daftar Segera Hadir!')} className="bg-orange text-black px-4 py-2 rounded-lg font-semibold text-sm mt-2">Daftar</button>
             </div>
           </motion.div>
         )}
