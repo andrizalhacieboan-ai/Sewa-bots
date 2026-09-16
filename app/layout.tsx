@@ -6,10 +6,10 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const poppins = Poppins({ subsets: ['latin'], weight: ['400', '700', '900'], variable: '--font-poppins' })
 
 export const metadata: Metadata = {
-  title: 'ANDRI STORE BOT — Sewa Bot WhatsApp Premium',
+  title: 'ANDRI STORE — Sewa Bot WhatsApp Premium',
   description: 'Sewa Bot WhatsApp premium untuk bisnis, komunitas dan kebutuhan pribadi dengan fitur lengkap dan support 24/7.',
   openGraph: {
-    title: 'ANDRI STORE BOT — Sewa Bot WhatsApp Premium',
+    title: 'ANDRI STORE — Sewa Bot WhatsApp Premium',
     description: 'Solusi Terbaik Untuk Bisnis & Komunitas. Cepat, Aman, Terpercaya.',
     type: 'website',
   }
