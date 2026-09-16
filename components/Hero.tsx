@@ -8,7 +8,7 @@ const Robot3D = dynamic(() => import('./Robot3D'), { ssr: false })
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden">
+    <section id="home" className="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden">
       <div className="absolute inset-0 bg-grid opacity-30 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]"></div>
       <div className="absolute top-1/4 -right-32 w-96 h-96 bg-purple/10 rounded-full blur-[150px]"></div>
       <div className="absolute bottom-1/4 -left-32 w-96 h-96 bg-orange/5 rounded-full blur-[150px]"></div>
@@ -36,10 +36,16 @@ export default function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <button className="bg-orange text-black px-6 py-3 rounded-xl font-bold text-base hover:shadow-[0_0_30px_rgba(255,107,0,0.6)] transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2">
+            <button 
+              onClick={() => alert('Aplikasi Mobile Segera Hadir!')}
+              className="bg-orange text-black px-6 py-3 rounded-xl font-bold text-base hover:shadow-[0_0_30px_rgba(255,107,0,0.6)] transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+            >
               Download Sekarang <ArrowRight size={18} />
             </button>
-            <button className="glass border border-white/20 text-white px-6 py-3 rounded-xl font-bold text-base hover:bg-white/10 transition-all duration-300">
+            <button 
+              onClick={() => document.getElementById('paket')?.scrollIntoView({ behavior: 'smooth' })}
+              className="glass border border-white/20 text-white px-6 py-3 rounded-xl font-bold text-base hover:bg-white/10 transition-all duration-300"
+            >
               Lihat Paket
             </button>
           </div>
@@ -50,7 +56,7 @@ export default function Hero() {
                 <div key={i} className="w-8 h-8 rounded-full bg-dark-gray border-2 border-black"></div>
               ))}
             </div>
-            <p className="text-xs text-gray">10.000+ pengguna telah mempercayai ANDRI STORE BOT</p>
+            <p className="text-xs text-gray">10.000+ pengguna telah mempercayai ANDRI STORE</p>
           </div>
         </motion.div>
 
