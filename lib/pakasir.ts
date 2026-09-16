@@ -18,7 +18,7 @@ export class Pakasir {
     }
   }
 
-  getPaymentUrl(method: PaymentMethod, order_id: string, amount: number, redirect_url?: string): PaymentPayload {
+    getPaymentUrl(method: PaymentMethod, order_id: string, amount: number, redirect_url?: string): PaymentPayload {
     order_id = sanitizeUrlSafe(order_id);
     const { slug } = this.config;
 
@@ -29,17 +29,16 @@ export class Pakasir {
     let payment_number;
     let expired_at = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
     let fee = 0;
-    redirect_url = redirect_url || null;
+    const finalRedirectUrl = redirect_url || null; // <--- UBAH MENJADI CONST BARU
 
     switch (method) {
       case 'all':
-        payment_url = `${BASE_API_URL}/pay/${slug}/${amount}?order_id=${order_id}&redirect=${redirect_url}`;
+        payment_url = `${BASE_API_URL}/pay/${slug}/${amount}?order_id=${order_id}&redirect=${finalRedirectUrl}`;
         break;
       case 'qris':
         fee = amount > 105000 ? Math.round(0.01 * amount) : Math.round(0.007 * amount + 310);
-        payment_url = `${BASE_API_URL}/pay/${slug}/${amount}?order_id=${order_id}&redirect=${redirect_url}&qris_only=1`;
+        payment_url = `${BASE_API_URL}/pay/${slug}/${amount}?order_id=${order_id}&redirect=${finalRedirectUrl}&qris_only=1`;
         break;
-      // (Other cases omitted for brevity, ensure they are in your file)
       default:
         throw new Error('Invalid payment method!');
     }
@@ -54,12 +53,11 @@ export class Pakasir {
       payment_method: method,
       payment_number,
       payment_url,
-      redirect_url,
+      redirect_url: finalRedirectUrl, // <--- GUNAKAN CONST BARU INI
       expired_at,
       completed_at: null,
     };
   }
-
   async createPayment(method: PaymentMethod, order_id: string, amount: number, redirect_url?: string): Promise<PaymentPayload> {
     order_id = sanitizeUrlSafe(order_id);
     const payload = this.getPaymentUrl(method, order_id, amount, redirect_url);
